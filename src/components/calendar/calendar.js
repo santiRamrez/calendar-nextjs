@@ -1,26 +1,81 @@
 import styles from './calendar.module.css' 
+import React, { useState, useEffect, useRef } from "react";
+
+/** Utils **/
+import getCurrentDate from '@/utils/getCurrentDate'
+import generateRenderDates from '@/utils/generateRenderDates';
+import monthToNumber from '@/utils/monthToNumber';
+
+
+/** Date Component **/
+function Dates({num, cl=styles.date}) {
+    return (
+        <div className={cl}>
+            <p>{num}</p>
+        </div>
+    )
+}
 
 export default function CalendarUI() {
+    const dt = new Date()
+    
+    // State of this component
+    const [month, setMonth] = useState(dt.toLocaleString('en-uk', {month:'long'}))
+    const [year, setYear] = useState(dt.getFullYear())
+    const [numMonth, setNumMonth] = useState(monthToNumber(month))
+    
+    
+
+    const renderDates = () => {
+       const [padding, totalRender] = generateRenderDates(numMonth, year)
+       let output = []
+       for (let j = 1; j <= padding + totalRender; j++) {
+            let cont = j - padding
+            if (cont <= 0) {
+                output.push(<Dates num={cont} key={j} cl={styles.hideDate}/>)
+            } else {
+                output.push(<Dates num={cont} key={j} cl={styles.date}/>)
+            }
+	    }
+        return output
+    }
+
+    useEffect(() => {
+        setNumMonth(monthToNumber(month))
+    }, [month])
+    
+
+
+    // Methods
+    const handleSelect = (e) => {
+        setMonth(e.target.value)
+        document.getElementById("months").value = e.target.value
+    };
+
+    const handleInput = (e) => {
+        setYear(e.target.value)
+    }
+
     return (
         <div className={styles.containerUI}>
             <div className={styles.calHeader}>
-                <h2>Today:<span id="today"></span></h2>
-                <select class="selectBtn" id="months"> 
-                    <option class="option">-- Month --</option>
-                    <option class="option">January</option>
-                    <option class="option">February</option>
-                    <option class="option">March</option>
-                    <option class="option">April</option>
-                    <option class="option">May</option>
-                    <option class="option">June</option>
-                    <option class="option">July</option>
-                    <option class="option">August</option>
-                    <option class="option">September</option>
-                    <option class="option">October</option>
-                    <option class="option">November</option>
-                    <option class="option">December</option>
+                <h2>{`${month}  -  ${year}`}</h2>
+                <select onChange={handleSelect} id="months"> 
+                    <option>-- Months --</option>
+                    <option>January</option>
+                    <option>February</option>
+                    <option>March</option>
+                    <option>April</option>
+                    <option>May</option>
+                    <option>June</option>
+                    <option>July</option>
+                    <option>August</option>
+                    <option>September</option>
+                    <option>October</option>
+                    <option>November</option>
+                    <option>December</option>
                 </select>
-		        <input type="text" id="year" placeholder="Type a year"/> 
+		        <input type="text" id="year" onChange={handleInput} placeholder="Type a year"/> 
             </div>
             <div className={styles.listDays}>
                     <p>Sun</p>
@@ -31,44 +86,8 @@ export default function CalendarUI() {
                     <p>Fri</p>
                     <p>Sat</p>
             </div>
-            <div className={styles.contDates}>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                    <div className={styles.date}>10</div>
-                  
+            <div id="renderDatesHere" className={styles.contDates}>
+                {renderDates().map((val) => val)}
             </div>
         </div>
     )
