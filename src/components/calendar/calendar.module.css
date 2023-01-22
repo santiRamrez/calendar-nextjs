@@ -1,0 +1,60 @@
+/*Layout of calendar component*/
+.containerUI{
+    width: 100%;
+    height: 100%;
+    border: 2px solid green;
+    display: flex;
+    flex-direction: column;
+}
+
+.calHeader {
+    width: 100%;
+    height: 10%;
+}
+
+
+
+.listDays {
+    width: 100%;
+    height: 32px;
+    display: flex;
+    flex-direction: row;
+    color: black;
+}
+
+/**** Container written days ****/
+.listDays p {
+    width: 14.28%;
+    height: 100%;
+    background-color: lightcoral;
+    color: #fff;
+    text-align: center;
+    border-right: 1px solid #fff;
+}
+
+/****** CSS Flexbox Dates UI To Render Dynamically ******/
+.contDates {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: red;
+}
+
+.date {
+    width: 12.2%;
+    height: 12%;
+    /*
+    margin-left: 16px;
+    margin-right: 13px;
+    margin-top: 12px;*/
+    margin-left: 1.1%;
+    margin-right: 0.9%;
+    margin-top: 12px;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

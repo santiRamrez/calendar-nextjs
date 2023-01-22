@@ -1,0 +1,29 @@
+.dashboard {
+    width: 100vw;
+    height: 100vh;
+    background-color: lightblue;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.headers {
+    width: 80%;
+    height: 12vh;
+    border: 2px solid red;
+}
+
+.calendar {
+    margin-top: 20px;
+    width: 100%;
+    height: 100%;
+    border: 2px solid red;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+
+
+
