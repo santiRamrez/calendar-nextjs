@@ -8,10 +8,11 @@ import monthToNumber from '@/utils/monthToNumber';
 
 
 /** Date Component **/
-function Dates({num, cl=styles.date}) {
+function Dates({num, cl=styles.date, handleClick}) {
+
     return (
         <div className={cl}>
-            <p>{num}</p>
+            <button onClick={handleClick} value={num}>{num}</button>
         </div>
     )
 }
@@ -23,8 +24,7 @@ export default function CalendarUI() {
     const [month, setMonth] = useState(dt.toLocaleString('en-uk', {month:'long'}))
     const [year, setYear] = useState(dt.getFullYear())
     const [numMonth, setNumMonth] = useState(monthToNumber(month))
-    
-    
+    const [chosenDate, setChosenDate] = useState(0)
 
     const renderDates = () => {
        const [padding, totalRender] = generateRenderDates(numMonth, year)
@@ -34,7 +34,7 @@ export default function CalendarUI() {
             if (cont <= 0) {
                 output.push(<Dates num={cont} key={j} cl={styles.hideDate}/>)
             } else {
-                output.push(<Dates num={cont} key={j} cl={styles.date}/>)
+                output.push(<Dates num={cont} key={j} handleClick={(e) => setChosenDate(e.target.value)}/>)
             }
 	    }
         return output
@@ -44,7 +44,6 @@ export default function CalendarUI() {
         setNumMonth(monthToNumber(month))
     }, [month])
     
-
 
     // Methods
     const handleSelect = (e) => {
@@ -60,21 +59,24 @@ export default function CalendarUI() {
         <div className={styles.containerUI}>
             <div className={styles.calHeader}>
                 <h2>{`${month}  -  ${year}`}</h2>
-                <select onChange={handleSelect} id="months"> 
-                    <option>-- Months --</option>
-                    <option>January</option>
-                    <option>February</option>
-                    <option>March</option>
-                    <option>April</option>
-                    <option>May</option>
-                    <option>June</option>
-                    <option>July</option>
-                    <option>August</option>
-                    <option>September</option>
-                    <option>October</option>
-                    <option>November</option>
-                    <option>December</option>
-                </select>
+                <div className={styles.customSelect}>
+                    <select onChange={handleSelect} id="months"> 
+                        <option>Select a month</option>
+                        <option>January</option>
+                        <option>February</option>
+                        <option>March</option>
+                        <option>April</option>
+                        <option>May</option>
+                        <option>June</option>
+                        <option>July</option>
+                        <option>August</option>
+                        <option>September</option>
+                        <option>October</option>
+                        <option>November</option>
+                        <option>December</option>
+                    </select>
+                    <span className={styles.arrow}></span>
+                </div>
 		        <input type="text" id="year" onChange={handleInput} placeholder="Type a year"/> 
             </div>
             <div className={styles.listDays}>
