@@ -4,6 +4,9 @@ import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 import Link from 'next/link'
 
+/***** React Hooks *****/
+import React, { useState, useEffect, useRef } from "react";
+
 /****** Layout  ******/
 import Dashboard from '../layout/dashboard'
 import Sidebar from '../layout/sidebar'
@@ -14,10 +17,44 @@ import Calendar from '../layout/calendar'
 
 /****** Components  ******/
 import CalendarUI from '../components/calendar/calendar'
+import Agenda from '../components/agenda/agenda'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const dt = new Date()
+
+  const [showAgenda, setShowAgenda] = useState(false)
+  const [pickedDate, setPickedDate] = useState()
+  const [data, setData] = useState()
+
+
+  const handleClickDate = (input) => {
+    if(input.date) {
+      setPickedDate(input)
+      setShowAgenda(true)
+    } 
+  }
+
+  const getDataFromCalendarUI = (a) => {
+    handleClickDate(a)
+    setPickedDate(prev => {
+      return {
+        ...prev,
+        "month":a
+      }
+    })
+  }
+ 
+  const closeAgenda = () => {
+    setShowAgenda(false)
+  }
+
+  useEffect(() => {
+
+  }, [])
+
+
   return (
     <>
       <Head>
@@ -32,9 +69,10 @@ export default function Home() {
             <Stack />
           </Sidebar>
           <Dashboard>
+            {showAgenda ? <Agenda show={showAgenda} d={pickedDate} handleClickBack={closeAgenda}/> : <Agenda show={false} d={pickedDate}/>}
             <Headers />
-            <Calendar>
-              <CalendarUI />
+            <Calendar >
+              <CalendarUI sendDate={(date) => getDataFromCalendarUI(date)} />
             </Calendar>
           </Dashboard>
       </div>

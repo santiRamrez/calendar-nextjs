@@ -1,5 +1,8 @@
-import styles from './calendar.module.css' 
 import React, { useState, useEffect, useRef } from "react";
+
+
+import styles from './calendar.module.css' 
+
 
 /** Utils **/
 import getCurrentDate from '@/utils/getCurrentDate'
@@ -17,7 +20,7 @@ function Dates({num, cl=styles.date, handleClick}) {
     )
 }
 
-export default function CalendarUI() {
+export default function CalendarUI({sendDate = (f) => f}) {
     const dt = new Date()
     
     // State of this component
@@ -34,22 +37,39 @@ export default function CalendarUI() {
             if (cont <= 0) {
                 output.push(<Dates num={cont} key={j} cl={styles.hideDate}/>)
             } else {
-                output.push(<Dates num={cont} key={j} handleClick={(e) => setChosenDate(e.target.value)}/>)
+                output.push(<Dates num={cont} key={j} handleClick={onClickDate}/>)
             }
 	    }
         return output
     }
 
+    
     useEffect(() => {
         setNumMonth(monthToNumber(month))
     }, [month])
-    
 
+    
     // Methods
     const handleSelect = (e) => {
         setMonth(e.target.value)
         document.getElementById("months").value = e.target.value
+        sendDate({"month": e.target.value})
+
     };
+
+    const onClickDate = (e) => {
+        setChosenDate(e.target.value)
+        //If the user has done click on a date
+        if (e.target.value) {
+                const d = {
+                    "date": e.target.value,
+                    "numM": numMonth,
+                    "month": month,
+                    "year": year
+                }
+                sendDate(d)
+        }
+    }
 
     const handleInput = (e) => {
         setYear(e.target.value)

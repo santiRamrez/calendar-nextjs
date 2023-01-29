@@ -1,0 +1,58 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Santiago Ramirez",
+      "email": "sarmejias@gmail.com",
+      "password": "holabebe"
+    }
+  ],
+  "dates" : [
+    {
+      "id": "1-2023",
+      "1-2023": [
+            {
+              "id": 1,
+              "userId": 1,
+              "reunionId": 1568,
+              "date": "date/01/2023",
+              "time-start": "10.00",
+              "time-end": "10.45"
+            },
+            {
+              "id": 2,
+              "subject": "Reunion con MAXCRI",
+              "description": "Proyectos - Crédito",
+              "userId": 1,
+              "date": "date/01/2023",
+              "time-start": "11.00",
+              "time-end": "11.45"
+            }
+      ]
+    },
+    {
+      "id": "2-2023",
+      "2-2023": [
+            {
+              "id": 1,
+              "subject": "Reunion con CTR",
+              "description": "Proyectos - Crédito",
+              "userId": 1,
+              "date": "date/01/2023",
+              "time-start": "10.00",
+              "time-end": "10.45"
+            },
+            {
+              "id": 2,
+              "subject": "Reunion con INFOLAND",
+              "description": "Proyectos - Crédito",
+              "userId": 1,
+              "date": "date/01/2023",
+              "time-start": "11.00",
+              "time-end": "11.45"
+            }
+      ]
+    }
+  ]
+}
+
