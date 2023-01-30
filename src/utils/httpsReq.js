@@ -1,6 +1,6 @@
-export class httpsReq {
-    constructor() {
-      this.url = "http://localhost:3004";
+export default class HttpsReq {
+    constructor(url) {
+      this.url = "http://localhost:4000";
     }
 
     /*Servicio de Obtención*/
@@ -10,7 +10,7 @@ export class httpsReq {
             const data = await response.json();
             return data;
         } catch(err) {
-            console.error(`Algo salió mal GET :( --> ${err}`)
+            return `Algo salió mal GET :( --> ${err}`
         }
     }
   

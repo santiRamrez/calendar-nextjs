@@ -125,11 +125,12 @@
     margin-right: 0.9%;
     margin-top: 12px;
     background-color: transparent;
-    border: 2px solid #ccc;
-    border-radius: 15px;
+    border: 1px solid #ccc;
+    border-radius: 9px;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative
 }
 
 .date button {
@@ -147,6 +148,20 @@
     color: rgb(5, 5, 34);
     cursor: pointer;
     transition: 0.2s all ease-out;
+}
+
+.showSpan {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: red;
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+}
+
+.hideSpan {
+    background-color: transparent 
 }
 
 .date button:focus {

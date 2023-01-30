@@ -15,7 +15,7 @@
               "id": 1,
               "userId": 1,
               "reunionId": 1568,
-              "date": "date/01/2023",
+              "date": 3,
               "time-start": "10.00",
               "time-end": "10.45"
             },
@@ -24,7 +24,7 @@
               "subject": "Reunion con MAXCRI",
               "description": "Proyectos - Crédito",
               "userId": 1,
-              "date": "date/01/2023",
+              "date": 4,
               "time-start": "11.00",
               "time-end": "11.45"
             }
@@ -38,7 +38,7 @@
               "subject": "Reunion con CTR",
               "description": "Proyectos - Crédito",
               "userId": 1,
-              "date": "date/01/2023",
+              "date": 5,
               "time-start": "10.00",
               "time-end": "10.45"
             },
@@ -47,7 +47,7 @@
               "subject": "Reunion con INFOLAND",
               "description": "Proyectos - Crédito",
               "userId": 1,
-              "date": "date/01/2023",
+              "date": 28,
               "time-start": "11.00",
               "time-end": "11.45"
             }

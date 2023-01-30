@@ -5,80 +5,103 @@ import styles from './calendar.module.css'
 
 
 /** Utils **/
-import getCurrentDate from '@/utils/getCurrentDate'
 import generateRenderDates from '@/utils/generateRenderDates';
 import monthToNumber from '@/utils/monthToNumber';
 
 
 /** Date Component **/
-function Dates({num, cl=styles.date, handleClick}) {
+function Dates({num, cl=styles.date, handleClick, classSpan=styles.hideSpan}) {
 
     return (
         <div className={cl}>
             <button onClick={handleClick} value={num}>{num}</button>
+            <span className={classSpan}></span>
         </div>
     )
 }
 
-export default function CalendarUI({sendDate = (f) => f}) {
+export default function CalendarUI({month, year, data, endpoint, sendDate = (f) => f}) {
     const dt = new Date()
     
     // State of this component
-    const [month, setMonth] = useState(dt.toLocaleString('en-uk', {month:'long'}))
-    const [year, setYear] = useState(dt.getFullYear())
-    const [numMonth, setNumMonth] = useState(monthToNumber(month))
-    const [chosenDate, setChosenDate] = useState(0)
+    const [date, setDate] = useState({
+        "month": month,
+        "year": year
+    })
+
+
+    useEffect(() => {
+        sendDate(date)
+    }, [date])
 
     const renderDates = () => {
-       const [padding, totalRender] = generateRenderDates(numMonth, year)
-       let output = []
-       for (let j = 1; j <= padding + totalRender; j++) {
-            let cont = j - padding
-            if (cont <= 0) {
-                output.push(<Dates num={cont} key={j} cl={styles.hideDate}/>)
-            } else {
-                output.push(<Dates num={cont} key={j} handleClick={onClickDate}/>)
+        if(data) {
+            const numberMonth = monthToNumber(date.month)
+            const [padding, totalRender] = generateRenderDates(numberMonth, date.year)
+            let output = []
+            for (let j = 1; j <= padding + totalRender; j++) {
+                    let cont = j - padding
+                    if (cont <= 0) {
+                        output.push(<Dates num={cont} key={j} cl={styles.hideDate}/>)
+                    } else {
+                        
+                        if(data.hasOwnProperty(endpoint)) {
+                            //Find how many dates or appointments are in this date
+                            let checkDate = data[endpoint].filter((rec) => rec.date === cont)
+                            if (checkDate.length > 0) {
+                                output.push(<Dates num={cont} key={j} handleClick={onClickDate} classSpan={styles.showSpan}/>)
+                            } else {
+                                output.push(<Dates num={cont} key={j} handleClick={onClickDate} classSpan={styles.hideSpan}/>)
+                            }
+                        } else {
+                            output.push(<Dates num={cont} key={j} handleClick={onClickDate}/>)
+                        }
+                        
+                    }
             }
-	    }
-        return output
+                return output
+        } else {
+            return false
+        }
+       
     }
 
-    
-    useEffect(() => {
-        setNumMonth(monthToNumber(month))
-    }, [month])
-
-    
     // Methods
     const handleSelect = (e) => {
-        setMonth(e.target.value)
         document.getElementById("months").value = e.target.value
-        sendDate({"month": e.target.value})
-
+        setDate((prev) => {
+            return {
+                ...prev,
+                "month": e.target.value
+            }
+        })
     };
 
     const onClickDate = (e) => {
-        setChosenDate(e.target.value)
         //If the user has done click on a date
-        if (e.target.value) {
-                const d = {
-                    "date": e.target.value,
-                    "numM": numMonth,
-                    "month": month,
-                    "year": year
-                }
-                sendDate(d)
+        if (e.target.value > 0) {
+                setDate((prev) => {
+                    return {
+                        ...prev,
+                        "date": e.target.value
+                    }
+                })
         }
     }
-
+    
     const handleInput = (e) => {
-        setYear(e.target.value)
+        setDate((prev) => {
+            return {
+                ...prev,
+                "year": e.target.value ? e.target.value : date.year
+            }
+        })
     }
 
     return (
         <div className={styles.containerUI}>
             <div className={styles.calHeader}>
-                <h2>{`${month}  -  ${year}`}</h2>
+                <h2>{`${date.month}  -  ${date.year}`}</h2>
                 <div className={styles.customSelect}>
                     <select onChange={handleSelect} id="months"> 
                         <option>Select a month</option>
@@ -97,7 +120,7 @@ export default function CalendarUI({sendDate = (f) => f}) {
                     </select>
                     <span className={styles.arrow}></span>
                 </div>
-		        <input type="text" id="year" onChange={handleInput} placeholder="Type a year"/> 
+		        <input type="text" id="year" onBlur={handleInput} placeholder="Type a year"/> 
             </div>
             <div className={styles.listDays}>
                     <p>Sun</p>
@@ -109,7 +132,7 @@ export default function CalendarUI({sendDate = (f) => f}) {
                     <p>Sat</p>
             </div>
             <div id="renderDatesHere" className={styles.contDates}>
-                {renderDates().map((val) => val)}
+                {data ? renderDates().map((val) => val) : "No data" }
             </div>
         </div>
     )

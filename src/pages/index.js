@@ -19,40 +19,57 @@ import Calendar from '../layout/calendar'
 import CalendarUI from '../components/calendar/calendar'
 import Agenda from '../components/agenda/agenda'
 
+/** Utils **/
+import getCurrentDate from '@/utils/getCurrentDate'
+import monthToNumber from '@/utils/monthToNumber';
+import HttpsReq  from '@/utils/HttpsReq' //this is a class and must be initialized
+
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
   const dt = new Date()
+  const startReq = new HttpsReq()
 
-  const [showAgenda, setShowAgenda] = useState(false)
-  const [pickedDate, setPickedDate] = useState()
+  // State of this component
   const [data, setData] = useState()
+  const [showAgenda, setShowAgenda] = useState(false)
+  const [selectedDate, setSelectedDate] = useState()
+  const [date, setDate] = useState({
+    "month": dt.toLocaleString('en-uk', {month:'long'}),
+    "year": dt.getFullYear(),
+  })
+  const [endpoint, setEndpoint] = useState("/")
 
+  useEffect(() => {
+    //Fetch all dates of the current month
+    const numberMonth = monthToNumber(date.month)
+    startReq.getAll(`dates/${numberMonth}-${date.year}`)
+      .then((response) => setData(response))
 
-  const handleClickDate = (input) => {
-    if(input.date) {
-      setPickedDate(input)
-      setShowAgenda(true)
-    } 
-  }
+  }, [endpoint])
 
-  const getDataFromCalendarUI = (a) => {
-    handleClickDate(a)
-    setPickedDate(prev => {
-      return {
-        ...prev,
-        "month":a
-      }
-    })
-  }
+  useEffect(() => {
+    const numberMonth = monthToNumber(date.month)
+    setEndpoint(`${numberMonth}-${date.year}`)
+  }, [date])
  
   const closeAgenda = () => {
     setShowAgenda(false)
+    setSelectedDate(0)
   }
 
-  useEffect(() => {
-
-  }, [])
+  const watchChanges = (d) => {
+    if (d.date) {
+      //If there is a date, is bc the user has clicked on a date
+      setSelectedDate(prev => {
+        if(d.date !== prev) {
+          setShowAgenda(true)
+          return d.date
+        }
+      })
+    }
+    setDate(d)
+  }
 
 
   return (
@@ -69,10 +86,10 @@ export default function Home() {
             <Stack />
           </Sidebar>
           <Dashboard>
-            {showAgenda ? <Agenda show={showAgenda} d={pickedDate} handleClickBack={closeAgenda}/> : <Agenda show={false} d={pickedDate}/>}
+            {showAgenda ? <Agenda show={showAgenda} handleClickBack={closeAgenda}/> : <Agenda show={false}/>}
             <Headers />
             <Calendar >
-              <CalendarUI sendDate={(date) => getDataFromCalendarUI(date)} />
+              <CalendarUI data={data} month={date.month} year={date.year} endpoint={endpoint} sendDate={(date) => watchChanges(date)} />
             </Calendar>
           </Dashboard>
       </div>
