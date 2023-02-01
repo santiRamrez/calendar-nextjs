@@ -20,7 +20,7 @@ function Dates({num, cl=styles.date, handleClick, classSpan=styles.hideSpan}) {
     )
 }
 
-export default function CalendarUI({month, year, data, endpoint, sendDate = (f) => f}) {
+export default function CalendarUI({month, year, data, endpoint, sendDate = (f) => f, showAgenda = (f) => f}) {
     const dt = new Date()
     
     // State of this component
@@ -86,6 +86,7 @@ export default function CalendarUI({month, year, data, endpoint, sendDate = (f) 
                         "date": e.target.value
                     }
                 })
+                showAgenda(true)
         }
     }
     

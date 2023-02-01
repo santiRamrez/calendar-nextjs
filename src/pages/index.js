@@ -33,7 +33,7 @@ export default function Home() {
   // State of this component
   const [data, setData] = useState()
   const [showAgenda, setShowAgenda] = useState(false)
-  const [selectedDate, setSelectedDate] = useState()
+  const [selectedDate, setSelectedDate] = useState(0)
   const [date, setDate] = useState({
     "month": dt.toLocaleString('en-uk', {month:'long'}),
     "year": dt.getFullYear(),
@@ -41,10 +41,10 @@ export default function Home() {
   const [endpoint, setEndpoint] = useState("/")
 
   useEffect(() => {
-    //Fetch all dates of the current month
     const numberMonth = monthToNumber(date.month)
+    //Fetch all dates of the current month
     startReq.getAll(`dates/${numberMonth}-${date.year}`)
-      .then((response) => setData(response))
+      .then((response) => response ? setData(response) : false)
 
   }, [endpoint])
 
@@ -63,7 +63,6 @@ export default function Home() {
       //If there is a date, is bc the user has clicked on a date
       setSelectedDate(prev => {
         if(d.date !== prev) {
-          setShowAgenda(true)
           return d.date
         }
       })
@@ -86,10 +85,10 @@ export default function Home() {
             <Stack />
           </Sidebar>
           <Dashboard>
-            {showAgenda ? <Agenda show={showAgenda} handleClickBack={closeAgenda}/> : <Agenda show={false}/>}
+            {showAgenda ? <Agenda show={showAgenda} data={data} selectedDate={selectedDate} handleClickBack={closeAgenda}/> : <Agenda show={false} data={data} selectedDate={selectedDate} handleClickBack={closeAgenda}/>}
             <Headers />
             <Calendar >
-              <CalendarUI data={data} month={date.month} year={date.year} endpoint={endpoint} sendDate={(date) => watchChanges(date)} />
+              <CalendarUI data={data} month={date.month} year={date.year} endpoint={endpoint} sendDate={(date) => watchChanges(date)} showAgenda={(bol) => setShowAgenda(bol)}/>
             </Calendar>
           </Dashboard>
       </div>
