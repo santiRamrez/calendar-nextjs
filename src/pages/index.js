@@ -33,7 +33,7 @@ export default function Home() {
   // State of this component
   const [data, setData] = useState()
   const [showAgenda, setShowAgenda] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(0)
+  const [selectedDate, setSelectedDate] = useState("0")
   const [date, setDate] = useState({
     "month": dt.toLocaleString('en-uk', {month:'long'}),
     "year": dt.getFullYear(),
@@ -44,7 +44,7 @@ export default function Home() {
     const numberMonth = monthToNumber(date.month)
     //Fetch all dates of the current month
     startReq.getAll(`dates/${numberMonth}-${date.year}`)
-      .then((response) => response ? setData(response) : false)
+      .then((response) => setData(response))
 
   }, [endpoint])
 
@@ -55,7 +55,7 @@ export default function Home() {
  
   const closeAgenda = () => {
     setShowAgenda(false)
-    setSelectedDate(0)
+    setSelectedDate("0")
   }
 
   const watchChanges = (d) => {
@@ -69,7 +69,6 @@ export default function Home() {
     }
     setDate(d)
   }
-
 
   return (
     <>
@@ -85,7 +84,7 @@ export default function Home() {
             <Stack />
           </Sidebar>
           <Dashboard>
-            {showAgenda ? <Agenda show={showAgenda} data={data} selectedDate={selectedDate} handleClickBack={closeAgenda}/> : <Agenda show={false} data={data} selectedDate={selectedDate} handleClickBack={closeAgenda}/>}
+            <Agenda show={showAgenda} data={data} chosenDate={selectedDate} handleClickBack={closeAgenda}/> 
             <Headers />
             <Calendar >
               <CalendarUI data={data} month={date.month} year={date.year} endpoint={endpoint} sendDate={(date) => watchChanges(date)} showAgenda={(bol) => setShowAgenda(bol)}/>

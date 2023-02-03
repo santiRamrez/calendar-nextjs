@@ -13,32 +13,44 @@ function Appointment({tStart, tEnd, subject, descrip}) {
     )
 }
 
-
-export default function Agenda({show, data, selectedDate, handleClickBack}) {
-    const [start, setStart] = useState()
+export default function Agenda({show, data, chosenDate, handleClickBack}) {
+    const [start, setStart] = useState(false)
 
     const renderActivities = () => {
-        //If there is no data
-        let output = []
-        if (selectedDate === 0) return false
-        if(data == false) return output.push(<p>...Nothing has been scheduled this month</p>)
-        if(data) {
-            const checkAppointments = data[data.id].filter((rec) => rec.date == Number(selectedDate))
-            if(checkAppointments.length > 0) {
-                //Sort the records
-                for(let rec of checkAppointments) {
-                    output.push(<Appointment key={rec.id} tStart={rec.timeStart} tEnd={rec.timeEnd} subject={rec.subject} descript={rec.description} />)
-                }
-                return output
-                
-            } else {
-                return output.push(<p>...Nothing has been scheduled this date</p>)
+        try {
+            let output = []
+            //If there is no data
+            if(!data.id) {
+                 output.push(<p>...Nothing has been scheduled this month</p>)
+                 return output
             }
+            else {
+                const checkAppointments = data[data.id].filter((rec) => Number(rec.date) == Number(chosenDate))
+                if(checkAppointments.length > 0) {
+                    //Sort the records
+                    for(let rec of checkAppointments) {
+                        output.push(<Appointment key={rec.id} tStart={rec.timeStart} tEnd={rec.timeEnd} subject={rec.subject} descript={rec.description} />)
+                    }
+                    return output
+                    
+                } else {
+                     output.push(<p>...Nothing has been scheduled this date</p>)
+                     return output
+                }
+            }
+        } catch(err) {
+            console.log(err)
         }
     } 
 
+    useEffect(() => {
+        if(chosenDate === "0" && !data) {
+            return
+        } else {
+            setStart(true)
+        }
 
-
+      }, [chosenDate])
 
     return (
         <>
@@ -52,7 +64,7 @@ export default function Agenda({show, data, selectedDate, handleClickBack}) {
                     <button>Send</button>
                 </form>
                 <div>
-                  
+                  {start ? renderActivities().map((val) => val) : "There is an error :( "}
                 </div>
             </div>
         </>
