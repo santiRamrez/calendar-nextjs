@@ -7,7 +7,7 @@ export default class HttpsReq {
     async getAll(endpoint) {
         try {
             const response = await fetch(`${this.url}/${endpoint}`);
-            const data = await response.json();
+            const data = await response.ok ? response.json() : false
             return data;
         } catch(err) {
             return `Algo salió mal GET :( --> ${err}`

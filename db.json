@@ -5,54 +5,86 @@
       "name": "Santiago Ramirez",
       "email": "sarmejias@gmail.com",
       "password": "holabebe"
-    }
-  ],
-  "dates" : [
-    {
-      "id": "1-2023",
-      "1-2023": [
-            {
-              "id": 1,
-              "userId": 1,
-              "reunionId": 1568,
-              "date": 3,
-              "timeStart": "10.00",
-              "timeEnd": "10.45"
-            },
-            {
-              "id": 2,
-              "subject": "Reunion con MAXCRI",
-              "description": "Proyectos - Crédito",
-              "userId": 1,
-              "date": 4,
-              "timeStart": "11.00",
-              "timeEnd": "11.45"
-            }
-      ]
     },
     {
-      "id": "2-2023",
-      "2-2023": [
-            {
-              "id": 1,
-              "subject": "Reunion con CTR",
-              "description": "Proyectos - Crédito",
-              "userId": 1,
-              "date": 5,
-              "timeStart": "10.00",
-              "timeEnd": "10.45"
-            },
-            {
-              "id": 2,
-              "subject": "Reunion con INFOLAND",
-              "description": "Proyectos - Crédito",
-              "userId": 1,
-              "date": 28,
-              "timeStart": "11.00",
-              "timeEnd": "11.45"
-            }
-      ]
+      "id": 2,
+      "name": "Samuel Ramirez",
+      "email": "samuel@gmail.com",
+      "password": "holabebe2"
+    }
+  ],
+  "dates": [
+    {
+      "id": 1,
+      "userId": 1,
+      "date": "01/03/2023",
+      "timeStart": "10.00",
+      "timeEnd": "10.45",
+      "subject": "Empiezan Vacaciones",
+      "description": "crear mensaje de back up"
+    },
+    {
+      "id": 2,
+      "subject": "Reunion con MAXCRI",
+      "description": "Proyectos - Crédito",
+      "userId": 1,
+      "date": "01/04/2023",
+      "timeStart": "11.00",
+      "timeEnd": "11.45"
+    },
+    {
+      "id": 3,
+      "subject": "Reunion con CTR",
+      "description": "Proyectos - Crédito",
+      "userId": 1,
+      "date": "02/02/2023",
+      "timeStart": "10.00",
+      "timeEnd": "10.45"
+    },
+    {
+      "id": 4,
+      "subject": "Reunion con INFOLAND",
+      "description": "Proyectos - Crédito",
+      "userId": 1,
+      "date": "02/28/2023",
+      "timeStart": "11.00",
+      "timeEnd": "11.45"
+    },
+    {
+      "id": 5,
+      "userId": 1,
+      "timeStart": "09.30",
+      "timeEnd": "10.30",
+      "subject": "Llamar a Constanzo",
+      "description": "Consultar estado de cotización proyecto Temuco - Puerto Montt",
+      "date": "02/06/2023"
+    },
+    {
+      "id": 6,
+      "userId": 1,
+      "timeStart": "09.30",
+      "timeEnd": "10.30",
+      "subject": "Llamar a SITE CHILE",
+      "description": "Coordinar reunion con Cristian Troncoso",
+      "date": "02/07/2023"
+    },
+    {
+      "id": 7,
+      "userId": 1,
+      "timeStart": "09.30",
+      "timeEnd": "10.30",
+      "subject": "Almuerzo Sandrita",
+      "description": "Llamar a sandrita",
+      "date": "02/08/2023"
+    },
+    {
+      "id": 8,
+      "userId": 1,
+      "timeStart": "11.30",
+      "timeEnd": "12.30",
+      "subject": "Cafe",
+      "description": "preparar café",
+      "date": "02/08/2023"
     }
   ]
 }
-

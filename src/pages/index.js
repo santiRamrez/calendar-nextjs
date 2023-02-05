@@ -38,35 +38,49 @@ export default function Home() {
     "month": dt.toLocaleString('en-uk', {month:'long'}),
     "year": dt.getFullYear(),
   })
-  const [endpoint, setEndpoint] = useState("/")
+  const [monthData, setMonthData] = useState({"month": "", "listActivities":[]})
+  const [numMonth, setNumMonth] = useState(`${monthToNumber(date.month)}` )
+
 
   useEffect(() => {
-    const numberMonth = monthToNumber(date.month)
-    //Fetch all dates of the current month
-    startReq.getAll(`dates/${numberMonth}-${date.year}`)
-      .then((response) => setData(response))
+    const pattern = numMonth.length === 2 ? numMonth : `0${numMonth}`
+    startReq.getAll("dates")
+    .then((response) => {
+            if (response) {
+              setData(response)
+              //Filter the dates of the current month
+              const filter = response.filter((rec) => {
+                  let splitDate = rec.date.split("/")
+                  return splitDate[0] === pattern ? true : false
+              })
+              setMonthData({
+                "month": date.month,
+                "listActivities": filter
+              })
+          }
+      })
 
-  }, [endpoint])
-
-  useEffect(() => {
-    const numberMonth = monthToNumber(date.month)
-    setEndpoint(`${numberMonth}-${date.year}`)
   }, [date])
- 
+
   const closeAgenda = () => {
     setShowAgenda(false)
     setSelectedDate("0")
   }
 
   const watchChanges = (d) => {
-    if (d.date) {
-      //If there is a date, is bc the user has clicked on a date
-      setSelectedDate(prev => {
-        if(d.date !== prev) {
-          return d.date
-        }
-      })
-    }
+      if (d.date) {
+        //If there is a date, is bc the user has clicked on a date
+        setSelectedDate(prev => {
+          if(d.date !== prev) {
+            return d.date
+          }
+        })
+      }
+      if(d.month) {
+        const n = monthToNumber(d.month).toString().length > 1 ? `0${monthToNumber(d.month)}` : monthToNumber(d.month).toString()
+        setNumMonth((prev) =>  prev !== n ? n : prev)
+      }
+
     setDate(d)
   }
 
@@ -84,10 +98,10 @@ export default function Home() {
             <Stack />
           </Sidebar>
           <Dashboard>
-            <Agenda show={showAgenda} data={data} chosenDate={selectedDate} handleClickBack={closeAgenda}/> 
+            <Agenda show={showAgenda} month={numMonth.length === 2 ? numMonth : `0${numMonth}`} year={date.year} data={monthData.listActivities} totalRecords={data? data.length : 0} chosenDate={selectedDate} handleClickBack={closeAgenda}/> 
             <Headers />
             <Calendar >
-              <CalendarUI data={data} month={date.month} year={date.year} endpoint={endpoint} sendDate={(date) => watchChanges(date)} showAgenda={(bol) => setShowAgenda(bol)}/>
+              <CalendarUI data={monthData.listActivities} month={date.month} year={date.year} sendDate={(date) => watchChanges(date)} showAgenda={(bol) => setShowAgenda(bol)}/>
             </Calendar>
           </Dashboard>
       </div>

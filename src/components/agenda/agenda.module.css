@@ -7,6 +7,7 @@
     transform: translate(-50%, -50%);
     background-color: aliceblue;
     z-index: 3;
+    padding: 16px;
 }
 
 .hideAgenda {
@@ -29,8 +30,94 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: transparent;
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 2;
+    filter: blur(5px);
 }
 
+.recContainer {
+    width: 100%;
+    height: auto;
+}
 
+/******** Records or appointments ************/
+.appoint, .altMsg {
+    font-family: 'Calibri';
+    width: 100%;
+    height: auto;
+    padding: 10px 16px;
+    border-radius: 10px;
+    background-color: #ddd;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: space-evenly;
+    position: relative;
+    margin-top: 16px;
+}
+
+.appoint button {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: black;
+    font-weight: bold;
+}
+
+/********* Styles of the form ***********/
+.agenda form {
+    width: 100%;
+    height: auto;
+}
+
+.agenda form input, .agenda form label {
+    font-family: 'Calibri';
+}
+
+.agenda .formTime {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.agenda form input {
+    padding: 5px 10px;
+    border: 1px solid transparent;
+    border-bottom: 1px solid lightseagreen;
+    width: 80px;
+    font-size: 16px;
+    margin-left: 12px;
+}
+
+.agenda .formText {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    position: relative;
+}
+
+.agenda .formText input {
+    width: 80%;
+}
+
+.agenda .formText .descrip {
+    margin: 8px 0;
+}
+
+.agenda .formText textarea {
+    font-family: 'Calibri';
+    padding: 5px 10px;
+    line-height: 20px;
+}
+
+.agenda .formText button {
+    margin: 0 auto;
+    margin-top: 16px;
+    padding: 5px 10px;
+    cursor: pointer;
+}

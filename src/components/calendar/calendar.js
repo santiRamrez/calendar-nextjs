@@ -20,7 +20,7 @@ function Dates({num, cl=styles.date, handleClick, classSpan=styles.hideSpan}) {
     )
 }
 
-export default function CalendarUI({month, year, data, endpoint, sendDate = (f) => f, showAgenda = (f) => f}) {
+export default function CalendarUI({month, year, data, sendDate = (f) => f, showAgenda = (f) => f}) {
     const dt = new Date()
     
     // State of this component
@@ -35,35 +35,34 @@ export default function CalendarUI({month, year, data, endpoint, sendDate = (f) 
     }, [date])
 
     const renderDates = () => {
-        if(data) {
-            const numberMonth = monthToNumber(date.month)
-            const [padding, totalRender] = generateRenderDates(numberMonth, date.year)
-            let output = []
-            for (let j = 1; j <= padding + totalRender; j++) {
-                    let cont = j - padding
-                    if (cont <= 0) {
-                        output.push(<Dates num={cont} key={j} cl={styles.hideDate}/>)
-                    } else {
-                        
-                        if(data.hasOwnProperty(endpoint)) {
-                            //Find how many dates or appointments are in this date
-                            let checkDate = data[endpoint].filter((rec) => rec.date === cont)
-                            if (checkDate.length > 0) {
-                                output.push(<Dates num={cont} key={j} handleClick={onClickDate} classSpan={styles.showSpan}/>)
-                            } else {
-                                output.push(<Dates num={cont} key={j} handleClick={onClickDate} classSpan={styles.hideSpan}/>)
-                            }
+        const numberMonth = monthToNumber(date.month)
+        const [padding, totalRender] = generateRenderDates(numberMonth, date.year)
+        let output = []
+        for (let j = 1; j <= padding + totalRender; j++) {
+                let cont = j - padding
+                if (cont <= 0) {
+                    output.push(<Dates num={cont} key={j} cl={styles.hideDate}/>)
+                } else {
+                
+                    if(data) {
+                        //Find how many dates or appointments are in this date
+                        let checkDate = data.filter((rec) => {
+                            let getDate = rec.date.split("/")[1]
+                            let getYear = rec.date.split("/")[2]
+                            return Number(getDate) === cont && getYear === year.toString() ? true : false
+                        })
+                        if (checkDate.length > 0) {
+                            output.push(<Dates num={cont} key={j} handleClick={onClickDate} classSpan={styles.showSpan}/>)
                         } else {
-                            output.push(<Dates num={cont} key={j} handleClick={onClickDate}/>)
+                            output.push(<Dates num={cont} key={j} handleClick={onClickDate} classSpan={styles.hideSpan}/>)
                         }
-                        
+                    } else {
+                        output.push(<Dates num={cont} key={j} handleClick={onClickDate}/>)
                     }
-            }
-                return output
-        } else {
-            return false
+                    
+                }
         }
-       
+        return output
     }
 
     // Methods
@@ -133,7 +132,7 @@ export default function CalendarUI({month, year, data, endpoint, sendDate = (f) 
                     <p>Sat</p>
             </div>
             <div id="renderDatesHere" className={styles.contDates}>
-                {data ? renderDates().map((val) => val) : "No data" }
+                {renderDates().map((val) => val)}
             </div>
         </div>
     )
