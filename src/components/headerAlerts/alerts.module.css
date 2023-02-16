@@ -1,0 +1,10 @@
+.welcome {
+    font-family: 'Calibri';
+    font-size: 22px;
+    width: auto;
+    height: auto;
+    padding: 16px;
+    color: #000;
+    background-color: lightgray;
+    border-radius: 10px;
+}

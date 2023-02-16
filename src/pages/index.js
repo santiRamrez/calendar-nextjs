@@ -40,6 +40,7 @@ export default function Home() {
   })
   const [monthData, setMonthData] = useState({"month": "", "listActivities":[]})
   const [numMonth, setNumMonth] = useState(`${monthToNumber(date.month)}` )
+  const [reload, setReload] = useState(false)
 
 
   useEffect(() => {
@@ -60,7 +61,7 @@ export default function Home() {
           }
       })
 
-  }, [date])
+  }, [date, reload])
 
   const closeAgenda = () => {
     setShowAgenda(false)
@@ -98,7 +99,7 @@ export default function Home() {
             <Stack />
           </Sidebar>
           <Dashboard>
-            <Agenda show={showAgenda} month={numMonth.length === 2 ? numMonth : `0${numMonth}`} year={date.year} data={monthData.listActivities} totalRecords={data? data.length : 0} chosenDate={selectedDate} handleClickBack={closeAgenda}/> 
+            <Agenda reload={reload} refresh={(bol) => setReload(bol)}  show={showAgenda} month={numMonth.length === 2 ? numMonth : `0${numMonth}`} year={date.year} data={monthData.listActivities} totalRecords={data? data.length : 0} chosenDate={selectedDate} handleClickBack={closeAgenda}/> 
             <Headers />
             <Calendar >
               <CalendarUI data={monthData.listActivities} month={date.month} year={date.year} sendDate={(date) => watchChanges(date)} showAgenda={(bol) => setShowAgenda(bol)}/>

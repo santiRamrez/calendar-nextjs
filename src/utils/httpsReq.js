@@ -54,10 +54,7 @@ export default class HttpsReq {
           method: "DELETE",
         });
         const data = response.json();
-        const ui = new UI();
-        console.log(bookId);
-        console.log(data);
-        ui.renderGet();
+        return data
       } catch {
         console.log("Algo salio mal DELETE");
       }

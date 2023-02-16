@@ -12,25 +12,27 @@ function Message({text}) {
     )
 }
 
-function Appointment({tStart, tEnd, subject, descrip, handleDelete}) {
+function Appointment({id, tStart, tEnd, date, subject, descrip, handleDelete, handleEdit}) {
     return (
-        <div className={styles.appoint}>
+        <div className={styles.appoint} data-id={id}>
             <p><b>Start at: </b> {tStart}</p>
             <p><b>End at: </b> {tEnd}</p>
+            <p><b>Date: </b> {date}</p>
             <p><b>Subject: </b> {subject}</p>
             <p><b>Description: </b> {descrip}</p>
-            <button type="button" onClick={handleDelete}>X</button>
+            <button className={styles.delete} type="button" onClick={handleDelete}>X</button>
+            <button className={styles.edit} type="button" onClick={handleEdit}>Edit</button>
         </div>
     )
 }
 
-export default function Agenda({show, data, month, year, chosenDate, totalRecords, handleClickBack}) {
+export default function Agenda({reload, show, data, month, year, chosenDate, totalRecords, handleClickBack, refresh =(f) => f}) {
     const HTTP = new HttpsReq()
 
     const [start, setStart] = useState(false)
     const [postAppoint, setPostAppoint] = useState({
         "id": "",
-        "userId" : 1,
+        "userId" : () => Math.floor(Math.random() * 250),
         "timeStart": "",
         "timeEnd": "",
         "subject": "",
@@ -55,7 +57,7 @@ export default function Agenda({show, data, month, year, chosenDate, totalRecord
                 if(checkAppointments.length > 0) {
                     //Sort the records
                     for(let rec of checkAppointments) {
-                        output.push(<Appointment key={rec.id} tStart={rec.timeStart} tEnd={rec.timeEnd} subject={rec.subject} descrip={rec.description} />)
+                        output.push(<Appointment key={rec.id} id={rec.id} tStart={rec.timeStart} tEnd={rec.timeEnd} date={rec.date} subject={rec.subject} descrip={rec.description} handleDelete={handleDelete} />)
                     }
                     return output
                     
@@ -68,6 +70,15 @@ export default function Agenda({show, data, month, year, chosenDate, totalRecord
             console.log(err)
         }
     } 
+
+    const handleDelete = (e) => {
+        e.preventDefault()
+        const id = e.target.parentElement.dataset.id
+        const URI = "dates/" 
+        HTTP.deleteRec(id, URI)
+        const updating = reload ? false : true
+        refresh(updating)
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -82,7 +93,8 @@ export default function Agenda({show, data, month, year, chosenDate, totalRecord
             "subject": "",
             "description": ""
         })
-
+        const updating = reload ? false : true
+        refresh(updating)
     }
 
     const handleInput = (e) => {
@@ -90,7 +102,6 @@ export default function Agenda({show, data, month, year, chosenDate, totalRecord
             return {
                 ...prev,
                 [e.target.name]: e.target.value,
-                "id": totalRecords + 1
             }
         })
     }
