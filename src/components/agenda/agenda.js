@@ -38,6 +38,7 @@ export default function Agenda({reload, show, data, month, year, chosenDate, tot
         "subject": "",
         "description": ""
     })
+    const [btn, setBtn] = useState("Send")
 
     const renderActivities = () => {
         try {
@@ -57,7 +58,7 @@ export default function Agenda({reload, show, data, month, year, chosenDate, tot
                 if(checkAppointments.length > 0) {
                     //Sort the records
                     for(let rec of checkAppointments) {
-                        output.push(<Appointment key={rec.id} id={rec.id} tStart={rec.timeStart} tEnd={rec.timeEnd} date={rec.date} subject={rec.subject} descrip={rec.description} handleDelete={handleDelete} />)
+                        output.push(<Appointment key={rec.id} id={rec.id} tStart={rec.timeStart} tEnd={rec.timeEnd} date={rec.date} subject={rec.subject} descrip={rec.description} handleDelete={handleDelete} handleEdit={handleEdit}/>)
                     }
                     return output
                     
@@ -83,8 +84,17 @@ export default function Agenda({reload, show, data, month, year, chosenDate, tot
     const handleSubmit = (e) => {
         e.preventDefault()
         const json = JSON.stringify(postAppoint)
-        const URI = "dates/" 
-        HTTP.postRecord(json, URI)   
+        let URI = "dates/" 
+        /***** Post | Create record ******/ 
+        if(btn === "Send") {
+            HTTP.postRecord(json, URI)   
+        
+        /***** Update record ******/    
+        } else {
+            URI = URI + "/" + postAppoint.id
+            HTTP.updateRecord(json, URI) 
+        }
+
         setPostAppoint({
             "id": "",
             "userId" : 1,
@@ -95,6 +105,28 @@ export default function Agenda({reload, show, data, month, year, chosenDate, tot
         })
         const updating = reload ? false : true
         refresh(updating)
+        setBtn("Send")
+    }
+
+    const handleEdit = (e) => {
+        e.preventDefault()
+        const id = e.target.parentElement.dataset.id
+        const record = data.length > 0 ? data.filter((rec) => Number(rec.id) === Number(id))[0] : false
+        setPostAppoint((prev) => {
+            return {
+                "id": record.id,
+                "date": record.date,
+                "userId" : 1,
+                "timeStart": record.timeStart,
+                "timeEnd": record.timeEnd,
+                "subject": record.subject,
+                "description": record.description
+            }
+        })
+
+        setBtn("Update")
+
+
     }
 
     const handleInput = (e) => {
@@ -148,7 +180,7 @@ export default function Agenda({reload, show, data, month, year, chosenDate, tot
                             Description:
                         </label>
                             <textarea placeholder="...Description here, is optional" name="description" value={postAppoint.description} onChange={handleInput}></textarea>
-                        <button type="Submit">Send</button>
+                        <button type="Submit">{btn}</button>
                     </div>
                 </form>
                 <div className={styles.recContainer}>
