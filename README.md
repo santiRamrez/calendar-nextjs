@@ -1,16 +1,8 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Calendar using React, Next.js and Aplying Zeller's Algorithm
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+You will need to install json-server to run a fake API.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
